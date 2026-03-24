@@ -19,5 +19,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // 5. Initialize Application
     appController.init();
     
+    // 6. Exponer logger para recibir mensajes desde Python en tiempo real
+    window.appLog = (msg, type) => logger.log(msg, type);
+    
     logger.log('[SISTEMA] NexusTop UI inicializado con Clean Architecture + SOLID.', 'system');
 });

@@ -13,6 +13,12 @@ export class CiscoConnectionService {
             return false;
         }
 
+        // Bridge to Python Backend natively!
+        if (window.pywebview && window.pywebview.api) {
+            return await window.pywebview.api.connect_cisco(config);
+        }
+
+        // Fallback si corre en navegador
         this.logger.log(`[SISTEMA] Iniciando conexión ${config.protocol} hacia ${config.host}...`, 'system');
         this.logger.log(`[SISTEMA] Verificando credenciales para el usuario '${config.username}'...`, 'system');
 
