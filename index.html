@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cisco Topology Manager</title>
+    <link rel="stylesheet" href="src/css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Menu -->
+        <aside class="sidebar">
+            <div class="brand">
+                <div class="logo-icon"><i class="ph ph-share-network"></i></div>
+                <h2>NexusTop</h2>
+            </div>
+            
+            <nav class="menu">
+                <button class="menu-item active" data-target="dashboard">
+                    <i class="ph ph-squares-four"></i><span>Dashboard</span>
+                </button>
+                <button class="menu-item" data-target="topologies">
+                    <i class="ph ph-graph"></i><span>Topologías</span>
+                </button>
+                <button class="menu-item" data-target="cisco-connect">
+                    <i class="ph ph-plugs-connected"></i><span>Conexión Cisco</span>
+                </button>
+                <button class="menu-item" data-target="terminal">
+                    <i class="ph ph-terminal-window"></i><span>Terminal</span>
+                </button>
+                <button class="menu-item" data-target="settings">
+                    <i class="ph ph-gear"></i><span>Ajustes</span>
+                </button>
+            </nav>
+
+            <div class="system-status">
+                <div class="status-indicator offline" id="connection-status-dot"></div>
+                <span id="connection-status-text">Desconectado</span>
+            </div>
+        </aside>
+
+        <!-- Main Workspace -->
+        <main class="workspace">
+            <header class="top-nav">
+                <div class="breadcrumb">
+                    <span class="path">NexusTop</span>
+                    <i class="ph ph-caret-right"></i>
+                    <span class="current-page" id="page-title">Dashboard</span>
+                </div>
+                <div class="user-profile">
+                    <button class="icon-btn"><i class="ph ph-bell"></i></button>
+                    <div class="avatar">
+                        <img src="https://ui-avatars.com/api/?name=Admin&background=10b981&color=fff" alt="User">
+                    </div>
+                </div>
+            </header>
+
+            <div class="content-area">
+                <!-- Dashboard -->
+                <section id="dashboard" class="view-section active">
+                    <div class="welcome-banner">
+                        <div class="banner-content">
+                            <h1>Bienvenido a NexusTop</h1>
+                            <p>Gestiona y conéctate a tus dispositivos de red Cisco desde una interfaz moderna.</p>
+                            <button class="btn-primary glow" id="btn-quick-connect">
+                                <i class="ph ph-rocket-launch"></i> Nueva Conexión
+                            </button>
+                        </div>
+                        <div class="banner-art">
+                            <div class="neon-circle"></div>
+                            <i class="ph ph-planet"></i>
+                        </div>
+                    </div>
+
+                    <div class="stats-grid">
+                        <div class="stat-card glass-panel">
+                            <div class="stat-icon"><i class="ph ph-hard-drives"></i></div>
+                            <div class="stat-info"><h3>Total Equipos</h3><h2>12</h2></div>
+                        </div>
+                        <div class="stat-card glass-panel">
+                            <div class="stat-icon warning"><i class="ph ph-warning-circle"></i></div>
+                            <div class="stat-info"><h3>Alertas</h3><h2>3</h2></div>
+                        </div>
+                        <div class="stat-card glass-panel">
+                            <div class="stat-icon success"><i class="ph ph-activity"></i></div>
+                            <div class="stat-info"><h3>Uptime Global</h3><h2>99.9%</h2></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Topologies -->
+                <section id="topologies" class="view-section">
+                    <div class="section-header">
+                        <h2>Topologías de Red</h2>
+                        <button class="btn-secondary"><i class="ph ph-plus"></i> Crear Nueva</button>
+                    </div>
+                    <div class="topology-grid">
+                        <div class="topo-card glass-panel">
+                            <div class="topo-preview"><i class="ph ph-star"></i></div>
+                            <div class="topo-details">
+                                <h3>Topología Estrella</h3>
+                                <p>Núcleo central con switches de acceso.</p>
+                                <button class="btn-outline">Ver Equipos</button>
+                            </div>
+                        </div>
+                        
+                        <div class="topo-card glass-panel">
+                            <div class="topo-preview"><i class="ph ph-circle-notch"></i></div>
+                            <div class="topo-details">
+                                <h3>Topología Anillo</h3>
+                                <p>Red redundante de 5 routers OSPF.</p>
+                                <button class="btn-outline">Ver Equipos</button>
+                            </div>
+                        </div>
+
+                        <div class="topo-card glass-panel">
+                            <div class="topo-preview"><i class="ph ph-tree-structure"></i></div>
+                            <div class="topo-details">
+                                <h3>Diseño Árbol</h3>
+                                <p>Distribución jerárquica empresarial.</p>
+                                <button class="btn-outline">Ver Equipos</button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Cisco Connection -->
+                <section id="cisco-connect" class="view-section">
+                    <div class="connect-wrapper">
+                        <div class="connect-form glass-panel">
+                            <h2><i class="ph ph-link"></i> Protocolo Conexión Cisco</h2>
+                            <p>Configura las credenciales y el protocolo para acceder al equipo de red.</p>
+                            
+                            <form id="connectionForm">
+                                <div class="form-group">
+                                    <label>Protocolo</label>
+                                    <div class="custom-select">
+                                        <select id="protocol">
+                                            <option value="ssh">SSH (Recomendado)</option>
+                                            <option value="telnet">Telnet (Inseguro)</option>
+                                            <option value="netconf">NETCONF</option>
+                                            <option value="console">Puerto Consola</option>
+                                        </select>
+                                        <i class="ph ph-caret-down"></i>
+                                    </div>
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label>Dirección IP / Host</label>
+                                        <div class="input-icon">
+                                            <i class="ph ph-globe"></i>
+                                            <input type="text" id="host" placeholder="192.168.1.1" required>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Puerto</label>
+                                        <div class="input-icon">
+                                            <i class="ph ph-hash"></i>
+                                            <input type="number" id="port" placeholder="22" value="22" required>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Usuario Cisco</label>
+                                    <div class="input-icon">
+                                        <i class="ph ph-user"></i>
+                                        <input type="text" id="username" placeholder="admin" required>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Contraseña / Secret</label>
+                                    <div class="input-icon">
+                                        <i class="ph ph-lock-key"></i>
+                                        <input type="password" id="password" placeholder="••••••••" required>
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="btn-primary glow w-full" id="btn-connect">
+                                    <i class="ph ph-power"></i> Iniciar Conexión
+                                </button>
+                            </form>
+                        </div>
+                        
+                        <div class="connect-illustrations">
+                            <div class="server-node animate-float">
+                                <i class="ph ph-hard-drives"></i>
+                                <span>Router Cisco</span>
+                            </div>
+                            <div class="connection-line"><div class="packet"></div></div>
+                            <div class="user-node animate-float-delayed">
+                                <i class="ph ph-laptop"></i>
+                                <span>Mi Aplicación</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Terminal -->
+                <section id="terminal" class="view-section">
+                    <div class="terminal-container glass-panel">
+                        <div class="terminal-header">
+                            <div class="mac-dots">
+                                <span class="dot close"></span>
+                                <span class="dot min"></span>
+                                <span class="dot max"></span>
+                            </div>
+                            <span>admin@router1: ~</span>
+                            <button class="icon-btn-small" onclick="document.getElementById('term-output').innerHTML=''"><i class="ph ph-trash"></i></button>
+                        </div>
+                        <div class="terminal-body" id="term-output">
+                            <div class="term-line system">NexusTop Terminal Emulator V1.0</div>
+                            <div class="term-line system">Consola interactiva preparada...</div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Settings -->
+                <section id="settings" class="view-section">
+                    <div class="settings-panel glass-panel" style="padding: 40px; max-width: 600px;">
+                        <h2 style="margin-bottom: 20px;">Configuración</h2>
+                        <p style="color: var(--text-muted); margin-bottom: 30px;">Preferencias del sistema de escritorio.</p>
+                        
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 20px; background: rgba(0,0,0,0.3); border-radius: 12px; margin-bottom: 15px;">
+                            <div>
+                                <h3 style="font-size: 16px; margin-bottom: 5px;">Tema Oscuro Avanzado</h3>
+                                <span style="font-size: 13px; color: var(--text-muted);">Activa bordes y reflejos de cristal holográfico.</span>
+                            </div>
+                            <div class="switch"></div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+    <script type="module" src="src/js/main.js"></script>
+</body>
+</html>
